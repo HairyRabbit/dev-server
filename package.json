@@ -1,0 +1,58 @@
+{
+  "name": "@rabbitcc/dev-server",
+  "version": "0.0.1",
+  "description": "Maybe your last dev-server",
+  "main": "lib/index.js",
+  "scripts": {
+    "start": "yarn build",
+    "build": "cross-env NODE_ENV=development yarn rollup -c",
+    "build:prod": "cross-env NODE_ENV=production yarn rollup -c",
+    "build:type": "flow gen-flow-files src/index.js > lib/index.js.flow",
+    "test": "jest",
+    "test:spec": "yarn build && webpack --config specs/basic/webpack.config.js",
+    "test:co": "jest --coverage",
+    "test:type": "flow"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HairyRabbit/dev-server.git"
+  },
+  "keywords": [],
+  "author": "Rabbit <yfhj1990@hotmail.com>",
+  "license": "GPL-3.0",
+  "files": [
+    "lib"
+  ],
+  "bugs": {
+    "url": "https://github.com/HairyRabbit/dev-server/issues"
+  },
+  "homepage": "https://github.com/HairyRabbit/dev-server#readme",
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.38",
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.38",
+    "@babel/plugin-proposal-export-default-from": "^7.0.0-beta.38",
+    "@babel/plugin-proposal-export-namespace-from": "^7.0.0-beta.38",
+    "@babel/plugin-proposal-throw-expressions": "^7.0.0-beta.38",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.38",
+    "@babel/preset-env": "^7.0.0-beta.38",
+    "@babel/preset-flow": "^7.0.0-beta.38",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "^22.1.0",
+    "flow-bin": "^0.64.0",
+    "jest": "^22.1.4",
+    "rollup": "^0.55.0",
+    "rollup-plugin-babel": "^4.0.0-beta.0",
+    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-json": "^2.3.0",
+    "rollup-plugin-node-resolve": "^3.0.2",
+    "rollup-plugin-uglify-es": "^0.0.1",
+    "webpack": "^3.10.0"
+  },
+  "peerDependencies": {
+    "webpack": "^3 | ^4",
+    "webpack-dev-server": "^2 | ^3"
+  },
+  "dependencies": {
+    "console.table": "^0.10.0"
+  }
+}
