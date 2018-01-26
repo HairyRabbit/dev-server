@@ -6,10 +6,19 @@ import babel from 'rollup-plugin-babel'
 import uglify from 'rollup-plugin-uglify-es'
 import pkg from './package.json'
 
-export default {
+export default [{
   input: path.resolve('src/index.js'),
+  output: path.resolve('lib/index.js')
+},{
+  input: path.resolve('src/serverCreater.js'),
+  output: path.resolve('lib/serverCreater.js')
+},{
+  input: path.resolve('src/webpackOptions.js'),
+  output: path.resolve('lib/webpackOptions.js')
+}].map(({input, output}) => ({
+  input: input,
   output: {
-    file: path.resolve('lib/index.js'),
+    file: output,
     format: 'cjs',
     exports: 'named'
   },
@@ -23,6 +32,11 @@ export default {
     'production' === process.env.NODE_ENV ? uglify({}) : []
   ),
   external: [].concat(
-    Object.keys(Object.assign({}, pkg.dependencies, pkg.peerDependencies))
+    Object.keys(Object.assign(
+      {},
+      pkg.dependencies,
+      pkg.optionalDependencies,
+      pkg.peerDependencies
+    ))
   )
-}
+}))
