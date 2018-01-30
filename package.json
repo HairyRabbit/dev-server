@@ -1,6 +1,6 @@
 {
   "name": "@rabbitcc/dev-server",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "A dev-server",
   "main": "lib/index.js",
   "scripts": {
@@ -11,7 +11,8 @@
     "test": "jest",
     "test:co": "jest --coverage",
     "test:type": "flow",
-    "test:spec": "yarn build && sh specs/test.sh"
+    "test:spec": "yarn build && sh specs/test.sh",
+    "prepublish": "yarn build:prod"
   },
   "repository": {
     "type": "git",
