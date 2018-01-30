@@ -1,7 +1,7 @@
 {
   "name": "@rabbitcc/dev-server",
-  "version": "0.0.1",
-  "description": "Maybe your last dev-server",
+  "version": "0.0.2",
+  "description": "A dev-server",
   "main": "lib/index.js",
   "scripts": {
     "start": "yarn build",
@@ -17,14 +17,20 @@
     "type": "git",
     "url": "git+https://github.com/HairyRabbit/dev-server.git"
   },
-  "keywords": [],
-  "author": "Rabbit <yfhj1990@hotmail.com>",
+  "keywords": [
+    "webpack",
+    "rollup"
+  ],
+  "author": "HairyRabbit <yfhj1990@hotmail.com>",
   "license": "GPL-3.0",
   "files": [
     "lib"
   ],
   "bugs": {
     "url": "https://github.com/HairyRabbit/dev-server/issues"
+  },
+  "bin": {
+    "devserver": "bin/cli.js"
   },
   "homepage": "https://github.com/HairyRabbit/dev-server#readme",
   "devDependencies": {
