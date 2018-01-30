@@ -1,6 +1,6 @@
 {
   "name": "@rabbitcc/dev-server",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A dev-server",
   "main": "lib/index.js",
   "scripts": {
@@ -25,7 +25,8 @@
   "license": "GPL-3.0",
   "files": [
     "lib",
-    "bin"
+    "bin",
+    "src"
   ],
   "bugs": {
     "url": "https://github.com/HairyRabbit/dev-server/issues"
@@ -62,8 +63,8 @@
     "webpack-dev-server": "^2 | ^3"
   },
   "optionalDependencies": {
-    "@rabbitcc/autodll-webpack-plugin": "^0.0.7",
-    "@rabbitcc/whisper-webpack-plugin": "^0.0.4",
+    "@rabbitcc/autodll-webpack-plugin": "^0.0.9",
+    "@rabbitcc/whisper-webpack-plugin": "^0.0.6",
     "clean-webpack-plugin": "^0.1.17",
     "favicons-webpack-plugin": "^0.0.7",
     "parallel-webpack": "^2.2.0"
