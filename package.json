@@ -1,6 +1,6 @@
 {
   "name": "@rabbitcc/dev-server",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A dev-server",
   "main": "lib/index.js",
   "scripts": {
@@ -78,6 +78,7 @@
     "file-loader": "^1.1.6",
     "html-webpack-plugin": "^2.30.1",
     "html-webpack-template": "^6.1.0",
+    "postcss-loader": "^2.0.10",
     "style-loader": "^0.19.1",
     "uglifyjs-webpack-plugin": "^1.1.6",
     "url-loader": "^0.6.2"
