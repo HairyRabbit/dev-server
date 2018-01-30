@@ -1,6 +1,6 @@
 {
   "name": "@rabbitcc/dev-server",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A dev-server",
   "main": "lib/index.js",
   "scripts": {
@@ -63,7 +63,7 @@
     "webpack-dev-server": "^2 | ^3"
   },
   "optionalDependencies": {
-    "@rabbitcc/autodll-webpack-plugin": "^0.0.9",
+    "@rabbitcc/autodll-webpack-plugin": "^0.0.10",
     "@rabbitcc/whisper-webpack-plugin": "^0.0.6",
     "clean-webpack-plugin": "^0.1.17",
     "favicons-webpack-plugin": "^0.0.7"
