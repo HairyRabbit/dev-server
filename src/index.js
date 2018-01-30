@@ -6,7 +6,7 @@
 
 import chalk from 'chalk'
 import norequire from './reqioreNoCache'
-import { exec } from 'child_process'
+import { execSync as exec } from 'child_process'
 import repl from 'repl'
 
 const port = '8080'
@@ -67,6 +67,8 @@ function myEval(input, context, filename, callback) {
     case 'rs': {
       server.close()
       server = null
+      server2.close()
+      server2 = null
       createServerInstace(host, port)
       break
     }
@@ -97,39 +99,17 @@ function myEval(input, context, filename, callback) {
       break
     }
     case '$': {
-      // try {
-      //   const output = exec(input.split(' ').slice(1).join(' '))
-      //   console.log(output.toString())
-      // } catch(error) {}
+      try {
+        const output = exec(input.split(' ').slice(1).join(' '))
+        console.log(output.toString())
+      } catch(error) {}
       break
     }
     case 'q': {
-      for(let key in replServer) {
-        if(key !== 'context'
-           && key !== 'input'
-           && key !== 'output'
-           && key !== 'on'
-           && key !== 'once'
-           && key !== 'addListener'
-           && key !== 'prependListener'
-           && key !== 'outputStream'
-           && key !== 'inputStream'
-           && key !== 'setMaxListeners'
-           && key !== 'getMaxListeners'
-           && key !== 'emit'
-           && key !== 'prependOnceListener'
-           && key !== 'removeListener'
-           && key !== 'removeAllListeners'
-           && key !== 'listeners'
-           && key !== 'listenerCount'
-           && key !== 'eventNames'
-           && !key.startsWith('_')) {
-          console.log(key, replServer[key])
-        }
-      }
       replServer.displayPrompt()
       console.log('Bye')
       replServer.close()
+      process.exit()
       break
     }
     case '?':

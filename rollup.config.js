@@ -32,6 +32,10 @@ export default [{
     'production' === process.env.NODE_ENV ? uglify({}) : []
   ),
   external: [].concat(
+    'repl',
+    'child_process',
+    'path',
+    'fs',
     Object.keys(Object.assign(
       {},
       pkg.dependencies,

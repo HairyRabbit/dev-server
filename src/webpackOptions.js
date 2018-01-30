@@ -55,13 +55,42 @@ export default function webpackOptions(env) {
         }
       },{
         test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'postcss-loader'
-        ]
+        use: isDev ? [{
+          loader: 'style-loader',
+          options: {
+            sourceMap: true
+          }
+        },{
+          loader: 'css-loader',
+          options: {
+            sourceMap: true,
+            modules: true,
+            importLoaders: 1,
+            camelCase: true
+          }
+        },{
+          loader: 'postcss-loader',
+          options: {
+            sourceMap: true
+          }
+        }] : ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [{
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              importLoaders: 1,
+              camelCase: true
+            }
+          },{
+            loader: 'postcss-loader',
+            options: {
+
+            }
+          }]
+        })
       },{
-        test: /\.(jpg|png|webp|ttf|woff|woff2|eot)$/,
+        test: /\.(svg|jpg|png|webp|ttf|woff|woff2|eot)$/,
         use: 'url-loader'
       }]
     },
@@ -76,6 +105,7 @@ export default function webpackOptions(env) {
     target: 'web',
     plugins: [].concat(
       new webpack.EnvironmentPlugin(['NODE_ENV', 'DEBUG']),
+      !isDev ? new ExtractTextPlugin('[name].css') : [],
       isDev ? new webpack.HotModuleReplacementPlugin() : [],
       isDev ? new webpack.NamedModulesPlugin() : new webpack.HashedModuleIdsPlugin(),
       new AutoDLLPlugin(),
