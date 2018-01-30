@@ -1,6 +1,6 @@
 {
   "name": "@rabbitcc/dev-server",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A dev-server",
   "main": "lib/index.js",
   "scripts": {
