@@ -7,7 +7,6 @@
 
 import path from 'path'
 import webpack from 'webpack'
-import WebpackDevServer from 'webpack-dev-server'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import HtmlWebpackTemplate from 'html-webpack-template'
@@ -80,7 +79,8 @@ export default function webpackOptions(env) {
             options: {
               modules: true,
               importLoaders: 1,
-              camelCase: true
+              camelCase: true,
+              minimize: true
             }
           },{
             loader: 'postcss-loader',

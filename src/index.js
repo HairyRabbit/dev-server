@@ -34,9 +34,6 @@ function createServerInstace(host, port) {
       process.exit()
       return
     }
-
-    console.log('Start server2...')
-    console.log(`Running on http://${host}:${port}`)
   })
 }
 
