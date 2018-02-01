@@ -24,7 +24,7 @@ const defaultServerOptions = {
   }
 }
 
-export default function createServer(host, port, env): void {
+export default function createServer(host: string, port: string, env: string, onCompile?: Function, onDone?: Function): void {
   /**
    * inject options
    */
@@ -41,5 +41,16 @@ export default function createServer(host, port, env): void {
     ])
   }
   const compiler = webpack(webpackOptions)
-  return new WebpackDevServer(compiler, serverOptions)
+
+  if(onCompile) {
+    compiler.plugin('compile', onCompile)
+  }
+  if(onDone) {
+    compiler.plugin('done', onDone)
+  }
+
+  return {
+    server: new WebpackDevServer(compiler, serverOptions),
+    compiler
+  }
 }

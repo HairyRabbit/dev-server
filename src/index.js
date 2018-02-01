@@ -4,69 +4,90 @@
  * @flow
  */
 
+import nodeRepl from 'repl'
 import chalk from 'chalk'
-import norequire from './reqioreNoCache'
+import request from 'request'
+import startServer, { closeServer } from './serverStartOrRestart'
 import { execSync as exec } from 'child_process'
-import repl from 'repl'
 
 const port = '8080'
 const host = '0.0.0.0'
 
-let replServer, server, server2
-
-function createServerInstace(host, port) {
-  const createServer = norequire('./serverCreater').default
-  server = createServer(host, port, 'development')
-  server.listen(port, host, err => {
-    if(err) {
-      console.log(err)
-      process.exit()
-      return
-    }
-
-    console.log('Start server...')
-    console.log(`Running on http://${host}:${port}`)
-  })
-  server2 = createServer(host, port, 'production')
-  server2.listen(8081, host, err => {
-    if(err) {
-      console.log(err)
-      process.exit()
-      return
-    }
-  })
-}
+let repl, state = {}
 
 export default function start() {
-  replServer = repl.start({
+  repl = nodeRepl.start({
     prompt: updateReplPrompt(),
     eval: myEval
   })
 
-  createServerInstace(host, port)
+  repl.pause()
 
-  replServer.defineCommand('ls', {
-    action(name) {
-      console.log(`ls ${name}`)
+  greeting()
+
+  startServer(host, port, err => {
+    if(err) {
+      console.error(err)
+      process.exit(2)
+      return
+    }
+
+    state.serverState = chalk`{greenBright ::${port}}`
+    repl.displayPrompt()
+    console.log(chalk`Server start on {blue http://${host}:${port}}, Webpack still work...`)
+    repl.resume()
+  }, webpackDoneHandle)
+}
+
+/**
+ * say hello
+ */
+function greeting() {
+  const url = 'https://api.4gml.com/yys/yy.php?fh=j'
+  request(url, (err, res, body) => {
+    if(err || 200 !== res.statusCode) {
+      repl.displayPrompt()
+      console.log(chalk`Happy Hack`)
+    } else {
+      repl.displayPrompt()
+      console.log(chalk`{bold ${JSON.parse(body).hitokoto} :)}`)
     }
   })
 }
 
-
+function webpackDoneHandle(stats) {
+  const json = stats.toJson()
+  if(json.errors.length) {
+    state.webpackState = chalk.bgRed.white(` FAIL `)
+  } else {
+    state.webpackState = chalk.bgGreen.white(` DONE `)
+  }
+  updateReplPrompt(repl)
+  repl.displayPrompt()
+}
 
 function myEval(input, context, filename, callback) {
   input = input.trim()
   const _input = input.split(' ')
   const cmd = _input.shift()
-  updateReplPrompt(replServer)
+  updateReplPrompt(repl)
 
   switch(cmd) {
     case 'rs': {
-      server.close()
-      server = null
-      server2.close()
-      server2 = null
-      createServerInstace(host, port)
+      startServer(host, port, err => {
+        if(err) {
+          console.error(err)
+          process.exit(2)
+          return
+        }
+
+        repl.displayPrompt()
+        console.log(`Server restart...`)
+      }, webpackDoneHandle)
+      break
+    }
+    case 'echo': {
+      greeting()
       break
     }
     case 'info': {
@@ -82,7 +103,7 @@ function myEval(input, context, filename, callback) {
       break
     }
     case 'test': {
-      replServer.displayPrompt()
+      repl.displayPrompt()
       console.log('Test run async, please wait...')
       exec('yarn test --color', (err, stdout, stderr) => {
         if (err) {
@@ -91,7 +112,7 @@ function myEval(input, context, filename, callback) {
         }
         console.log(stdout)
         console.log(stderr)
-        replServer.displayPrompt()
+        repl.displayPrompt()
       })
       break
     }
@@ -103,9 +124,10 @@ function myEval(input, context, filename, callback) {
       break
     }
     case 'q': {
-      replServer.displayPrompt()
+      closeServer()
+      repl.displayPrompt()
       console.log('Bye')
-      replServer.close()
+      repl.close()
       process.exit()
       break
     }
@@ -135,12 +157,28 @@ q\texit
   callback(false);
 }
 
-function updateReplPrompt(repl) {
+/**
+ * prompt format
+ *
+ * > TIME SERVERSTATE WEBPACKSTATE
+ */
+function updateReplPrompt(repl: nodeRepl): ?string {
+  let str = []
   const now = new Date().toTimeString().substr(0, 5)
-  const prompt = chalk.blue(`> ${now} `)
+  str.push(now)
+  if(state.serverState) {
+    str.push(state.serverState)
+  }
+
+  if(state.webpackState) {
+    str.push(state.webpackState)
+  }
+
+  const prompt = chalk`{blue > ${str.join(' ')} }`
+
   if(repl) {
     repl.setPrompt(prompt)
-    return
+    return null
   }
 
   return prompt
