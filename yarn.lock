@@ -502,16 +502,16 @@
     chalk "^2.3.0"
     webpack-sources "^1.1.0"
 
-"@rabbitcc/icon-loader@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@rabbitcc/icon-loader/-/icon-loader-0.0.6.tgz#61c82c8b664f2066dc5bb29c793b224bae833cab"
+"@rabbitcc/icon-loader@^0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@rabbitcc/icon-loader/-/icon-loader-0.0.10.tgz#7f503e005c814d9de03c8180617d82df3e3b1d78"
   dependencies:
     loader-utils "^1.1.0"
     react-svg-core "^2.1.0"
 
-"@rabbitcc/icon-webpack-plugin@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@rabbitcc/icon-webpack-plugin/-/icon-webpack-plugin-0.0.6.tgz#3e54957e87d49c6c0882db87a749e5b59c48ee50"
+"@rabbitcc/icon-webpack-plugin@^0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@rabbitcc/icon-webpack-plugin/-/icon-webpack-plugin-0.0.10.tgz#544ccb871a9c1786d95115160c014b6ade17a9f6"
   dependencies:
     "@rabbitcc/promise-extra" "^0.0.8"
     glob "^7.1.2"
@@ -523,13 +523,15 @@
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/@rabbitcc/promise-extra/-/promise-extra-0.0.8.tgz#bc5217baef3bc804edef912983ddb0560521bcff"
 
-"@rabbitcc/whisper-webpack-plugin@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@rabbitcc/whisper-webpack-plugin/-/whisper-webpack-plugin-0.0.6.tgz#7e526d32d256bfd1c0547151db1779b7f62d2762"
+"@rabbitcc/whisper-webpack-plugin@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@rabbitcc/whisper-webpack-plugin/-/whisper-webpack-plugin-0.0.7.tgz#1eff7551e843ec90962d2326164973e9802388f6"
   dependencies:
     "@babel/code-frame" "^7.0.0-beta.38"
     chalk "^2.3.0"
     console.table "^0.10.0"
+    esutils "^2.0.2"
+    js-tokens "^4.0.0"
 
 abab@^1.0.4:
   version "1.0.4"
@@ -4962,6 +4964,10 @@ js-base64@^2.1.9:
 js-tokens@^3.0.0, js-tokens@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
+
+js-tokens@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
 
 js-yaml@^3.4.3, js-yaml@^3.7.0, js-yaml@~3.10.0:
   version "3.10.0"
