@@ -31,6 +31,7 @@ export default function makeWebpackOptions(env) {
   const isDev = env === 'development'
   const isProd = env === 'production'
   return {
+    mode: env,
     entry: {
       main: [
         path.resolve(src, 'index.js')
@@ -151,6 +152,10 @@ export default function makeWebpackOptions(env) {
         mobile: true,
         meta: [].concat(
           // metas
+          {
+            "http-equiv": "Content-Security-Policy",
+            "content": "default-src 'self' 'unsafe-inline' localhost:8080/*;"
+          }
         ),
         window: {
           env: {

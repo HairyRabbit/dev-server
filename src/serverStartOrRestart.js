@@ -36,7 +36,7 @@ export default function startOrRestartServer(host: string, port: string, callbac
    * start the dev server
    */
   server = createServer(host, port, 'development', onCompile, onDone).server
-  server.listen(port, host, callback)
+  server.listen(callback)
 }
 
 export function closeServer() {
