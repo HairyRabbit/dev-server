@@ -25,8 +25,7 @@ const images = path.resolve('public/images')
 const icons = path.resolve('public/icons')
 const nodeModules = path.resolve('node_modules')
 
-
-export default function webpackOptions(env) {
+export default function makeWebpackOptions(env) {
   process.env.NODE_ENV = env
   process.env.DEBUG = process.env.DEBUG || true
   const isDev = env === 'development'
@@ -94,7 +93,16 @@ export default function webpackOptions(env) {
       },{
         test: /\.svg$/,
         include: [icons],
-        use: '@rabbitcc/icon-loader'
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true,
+            forceEnv: env,
+            highlightCode: true
+          }
+        },{
+          loader: '@rabbitcc/icon-loader'
+        }]
       },{
         test: /\.(svg|jpg|png|webp|ttf|woff|woff2|eot)$/,
         exclude: [icons],
@@ -116,8 +124,6 @@ export default function webpackOptions(env) {
     devtool: isDev ? 'source-map' : 'none',
     target: 'web',
     plugins: [].concat(
-      new webpack.EnvironmentPlugin(['NODE_ENV', 'DEBUG']),
-      !isDev ? new ExtractTextPlugin('[name].css') : [],
       isDev ? new webpack.HotModuleReplacementPlugin() : [],
       isDev ? new webpack.NamedModulesPlugin() : new webpack.HashedModuleIdsPlugin(),
       isDev ? new AutoDLLPlugin() : [],
@@ -125,8 +131,15 @@ export default function webpackOptions(env) {
         optionPath: __dirname,
         checkSilent: false
       }) : [],
+      !isDev ? new ExtractTextPlugin('[name].css') : [],
       !isDev ? new CleanWebpackPlugin(['dist'], { root: __dirname }) : [],
       !isDev ? new webpack.optimize.ModuleConcatenationPlugin() : [],
+      !isDev ? new UglifyJsPlugin({
+        cache: true,
+        sourceMap: true,
+        parallel: 2
+      }) : [],
+      new webpack.EnvironmentPlugin(['NODE_ENV', 'DEBUG']),
       new IconWebpackPlugin({
         context: icons
       }),
@@ -143,21 +156,13 @@ export default function webpackOptions(env) {
           env: {
             apiHost: 'http://myapi.com/api/v1'
           }
-        },
-        scripts: [
-          'vendor.js'
-        ]
-      }),
+        }
+      })
       // !isDev ? new FaviconsWebpackPlugin({
       //   logo: path.resolve(images, 'favicon.jpg'),
       //   prefix: tmp
       //   // title: websiteConfig.title
       // }) : [],
-      !isDev ? new UglifyJsPlugin({
-        cache: true,
-        sourceMap: true,
-        parallel: 2
-      }) : []
     )
   }
 }
