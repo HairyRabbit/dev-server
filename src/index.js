@@ -144,11 +144,11 @@ q\texit
       break
     }
     default: {
-      // try {
-      //   console.log(eval(input))
-      // } catch(error) {
-      //   console.log(`Hummmm... command ${log(cmd)} not supports, type ${log('?')} to print help.`)
-      // }
+      try {
+        console.log(eval(input))
+      } catch(error) {
+        console.log(`Hummmm... command ${cmd} not supports, type ${'?'} to print help.`)
+      }
 
       break
     }
