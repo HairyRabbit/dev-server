@@ -10,8 +10,8 @@ export default [{
   input: path.resolve('src/index.js'),
   output: path.resolve('lib/index.js')
 },{
-  input: path.resolve('src/serverCreater.js'),
-  output: path.resolve('lib/serverCreater.js')
+  input: path.resolve('src/serverCreator.js'),
+  output: path.resolve('lib/serverCreator.js')
 },{
   input: path.resolve('src/webpackOptions.js'),
   output: path.resolve('lib/webpackOptions.js')

@@ -4,27 +4,45 @@
  * @flow
  */
 
-import nodeRepl from 'repl'
+import nodeRepl, { type REPLServer } from 'repl'
 import chalk from 'chalk'
 import request from 'request'
-import startServer, { closeServer } from './serverStartOrRestart'
+import startServer, { closeServer, DefaultPort, DefaultHost } from './serverStartOrRestart'
+import createTask, { clearTimer, DefaultTaskTimeout } from './taskCreateor'
 import { execSync as exec } from 'child_process'
+import type { Compiler } from 'webpack/cli/Compiler'
 
-const port = '8080'
-const host = '0.0.0.0'
+const host = DefaultHost
+const port = DefaultPort
+const DefaultPrompt = '> '
 
-let repl, state = {}
+let repl = null
+let webpackCurrentState = null
 
 export default function start() {
+  /**
+   * initial REPLServer
+   */
   repl = nodeRepl.start({
-    prompt: updateReplPrompt(),
-    eval: myEval
+    prompt: DefaultPrompt,
+    eval: commander
   })
 
   repl.pause()
 
+  /**
+   * say hello
+   */
   greeting()
 
+  /**
+   * run compile prod code task pre 15 min
+   */
+  createTask(DefaultTaskTimeout, onTaskBeginCompile, onTaskCompleted)
+
+  /**
+   * start web server to dev
+   */
   startServer(host, port, err => {
     if(err) {
       console.error(err)
@@ -32,11 +50,28 @@ export default function start() {
       return
     }
 
-    state.serverState = chalk`{greenBright ::${port}}`
-    repl.displayPrompt()
-    console.log(chalk`Server start on {blue http://${host}:${port}}, Webpack still work...`)
+    log(chalk`Server start on {blue http://${host}:${port}}, Webpack start compiling...`)
     repl.resume()
-  }, webpackDoneHandle)
+  }, onServerCompileCompleted)
+}
+
+function onTaskBeginCompile(compiler: Compiler): void {
+  log('Webpack start to build production mode code.')
+}
+
+function onTaskCompleted(err: Error, data: Object): void {
+  if(err) {
+    log(`something wrong when task running.`)
+    console.error(err)
+    return
+  }
+
+  const json = data.toJson()
+  if(json.errors.length) {
+    log('The production code compile failed.')
+  } else {
+    log('The production code compile success.')
+  }
 }
 
 /**
@@ -55,131 +90,125 @@ function greeting() {
   })
 }
 
-function webpackDoneHandle(stats) {
-  const json = stats.toJson()
-  if(json.errors.length) {
-    state.webpackState = chalk.bgRed.white(` FAIL `)
-  } else {
-    state.webpackState = chalk.bgGreen.white(` DONE `)
-  }
-  updateReplPrompt(repl)
+function onServerCompileCompleted(stats) {
+  webpackCurrentState = !Boolean(stats.toJson().errors.length)
+  setReplPrompt(repl)
   repl.displayPrompt()
 }
 
-function myEval(input, context, filename, callback) {
+function commander(input, context, filename, callback) {
   input = input.trim()
   const _input = input.split(' ')
   const cmd = _input.shift()
-  updateReplPrompt(repl)
+  setReplPrompt(repl)
 
   switch(cmd) {
-    case 'rs': {
-      startServer(host, port, err => {
-        if(err) {
-          console.error(err)
-          process.exit(2)
-          return
-        }
+  case '': {
+    break
+  }
+  case 'rs': {
+    startServer(host, port, err => {
+      if(err) {
+        console.error(err)
+        process.exit(2)
+        return
+      }
 
-        repl.displayPrompt()
-        console.log(`Server restart...`)
-      }, webpackDoneHandle)
-      break
-    }
-    case 'echo': {
-      greeting()
-      break
-    }
-    case 'info': {
-      // console.table(Object.keys(printProjectInfo).map(key => {
-      //   return {
-      //     name: key,
-      //     version: printProjectInfo[key]
-      //   }
-      // }))
-      break
-    }
-    case 'st': {
-      break
-    }
-    case 'test': {
+      log(`Server restart...`)
+    }, onServerCompileCompleted)
+    break
+  }
+  case 'echo': {
+    greeting()
+    break
+  }
+  case 'info': {
+    // console.table(Object.keys(printProjectInfo).map(key => {
+    //   return {
+    //     name: key,
+    //     version: printProjectInfo[key]
+    //   }
+    // }))
+    break
+  }
+  case 'st': {
+    break
+  }
+  case 'test': {
+    repl.displayPrompt()
+    console.log('Test run async, please wait...')
+    exec('yarn test --color', (err, stdout, stderr) => {
+      if (err) {
+        console.error(err)
+        return;
+      }
+      console.log(stdout)
+      console.log(stderr)
       repl.displayPrompt()
-      console.log('Test run async, please wait...')
-      exec('yarn test --color', (err, stdout, stderr) => {
-        if (err) {
-          console.error(err)
-          return;
-        }
-        console.log(stdout)
-        console.log(stderr)
-        repl.displayPrompt()
-      })
-      break
-    }
-    case '$': {
-      try {
-        const output = exec(input.split(' ').slice(1).join(' '))
-        console.log(output.toString())
-      } catch(error) {}
-      break
-    }
-    case 'q': {
-      closeServer()
-      repl.displayPrompt()
-      console.log('Bye')
-      repl.close()
-      process.exit()
-      break
-    }
-    case '?':
-    case 'h':
-    case 'help':{
-      console.log(`\
+    })
+    break
+  }
+  case '$': {
+    try {
+      const output = exec(input.split(' ').slice(1).join(' '))
+      console.log(output.toString())
+    } catch(error) {}
+    break
+  }
+  case 'q': {
+    clearTimer()
+    closeServer()
+    log('Bye')
+    repl.close()
+    process.exit()
+    break
+  }
+  case '?':
+  case 'h':
+  case 'help':{
+    console.log(`\
 Avaiable commands:
 
 rs\trestart server
 $\texec command
 q\texit
 `)
-      break
-    }
-    default: {
-      // try {
-      //   console.log(eval(input))
-      // } catch(error) {
-      //   console.log(`Hummmm... command ${log(cmd)} not supports, type ${log('?')} to print help.`)
-      // }
+    break
+  }
+  default: {
+    // try {
+    //   console.log(eval(input))
+    // } catch(error) {
+    //   console.log(`Hummmm... command ${log(cmd)} not supports, type ${log('?')} to print help.`)
+    // }
 
-      break
-    }
+    break
+  }
   }
 
   callback(false);
 }
 
 /**
- * prompt format
+ * set repl prompt
  *
- * > TIME SERVERSTATE WEBPACKSTATE
+ * ```
+ *   [WEBPACKCURRENTSTATE] >
+ * ```
  */
-function updateReplPrompt(repl: nodeRepl): ?string {
-  let str = []
-  const now = new Date().toTimeString().substr(0, 5)
-  str.push(now)
-  if(state.serverState) {
-    str.push(state.serverState)
-  }
+function setReplPrompt(repl: REPLServer, color: string): void {
+  const prompt = null !== webpackCurrentState
+        ? (webpackCurrentState
+           ? chalk.bgGreen.white(' DONE ')
+           : chalk.bgRed.white(' FAIL ')) + ' ' + DefaultPrompt
+        : DefaultPrompt
+  repl.setPrompt(prompt)
+}
 
-  if(state.webpackState) {
-    str.push(state.webpackState)
-  }
-
-  const prompt = chalk`{blue > ${str.join(' ')} }`
-
-  if(repl) {
-    repl.setPrompt(prompt)
-    return null
-  }
-
-  return prompt
+/**
+ * log util
+ */
+function log() {
+  repl.displayPrompt()
+  console.log.apply(console, arguments)
 }
