@@ -28,8 +28,7 @@ export default [{
     }),
     babel({ exclude: 'node_modules/**' }),
     json({ exclude: 'node_modules/**' }),
-    commonjs(),
-    'production' === process.env.NODE_ENV ? uglify({}) : []
+    commonjs()
   ),
   external: [].concat(
     'repl',
