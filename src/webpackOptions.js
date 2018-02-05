@@ -18,8 +18,8 @@ import IconWebpackPlugin from '@rabbitcc/icon-webpack-plugin'
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin'
 
 const tmp = path.resolve('tmp')
-const src = path.resolve('src')
-const dist = path.resolve('dist')
+export const src = path.resolve('src')
+export const dist = path.resolve('dist')
 const config = path.resolve('config')
 const images = path.resolve('public/images')
 const icons = path.resolve('public/icons')
@@ -27,7 +27,6 @@ const nodeModules = path.resolve('node_modules')
 
 export default function makeWebpackOptions(env) {
   process.env.NODE_ENV = env
-  process.env.DEBUG = process.env.DEBUG || true
   const isDev = env === 'development'
   const isProd = env === 'production'
   return {
@@ -139,7 +138,7 @@ export default function makeWebpackOptions(env) {
         sourceMap: true,
         parallel: 2
       }) : [],
-      new webpack.EnvironmentPlugin(['NODE_ENV', 'DEBUG']),
+      new webpack.EnvironmentPlugin(['NODE_ENV']),
       new IconWebpackPlugin({
         context: icons
       }),

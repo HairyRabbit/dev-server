@@ -4,42 +4,40 @@
  * @flow
  */
 
+import { identity as id } from 'lodash'
 import webpack from 'webpack'
-import NodeOutputFileSystem from 'webpack/lib/node/NodeOutputFileSystem'
 import norequire from './reqioreNoCache'
 
-let server
+export const DefaultPort = '8080'
+export const DefaultHost = '0.0.0.0'
 
-export default function startOrRestartServer(host: string, port: string, callback: Function, onDone?: Function): void {
+let server = null
+
+export default function startOrRestartServer(host: string = DefaultHost, port: string = DefaultPort, callback: Function, onCompleted?: Function): void {
   /**
-   * close server
+   * close server if already started
    */
   if(server) {
-    server.close()
-    server = null
+    closeServer()
   }
 
-  const createServer = norequire('./serverCreater').default
-
-  /**
-   * build production mode code at next tick
-   */
-  function onCompile() {
-    // process.nextTick(() => {
-    //   const compiler = createServer(host, port, 'production').compiler
-    //   compiler.outputFileSystem = new NodeOutputFileSystem()
-    //   compiler.run(() => {})
-    // })
-  }
-
+  const createServer = norequire('./serverCreator').default
   /**
    * start the dev server
    */
-  server = createServer(host, port, 'development', onCompile, onDone).server
+  server = createServer(host, port, onCompleted)
   server.listen(port, host, callback)
 }
 
 export function closeServer() {
   server.close()
   server = null
+}
+
+export function onServerCompileCompleted(options) {
+  return stats => {
+    options.webpackCurrentState = !Boolean(stats.toJson().errors.length)
+    options.setReplPrompt(options.repl)
+    options.repl.displayPrompt()
+  }
 }
