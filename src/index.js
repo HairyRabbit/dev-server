@@ -23,6 +23,7 @@ import startServer, {
 
 const host = DefaultHost
 const port = DefaultPort
+const timeout = DefaultTaskTimeout
 const DefaultPrompt = '> '
 
 let repl = null
@@ -34,7 +35,8 @@ const options = {
   webpackCurrentState,
   log,
   host,
-  port
+  port,
+  timeout
 }
 
 install(rs.test, rs.name, rs.helper, rsCommand)
@@ -88,8 +90,7 @@ function onTaskCompleted(err: Error, data: Object): void {
     return
   }
 
-  const json = data.toJson()
-  if(json.errors.length) {
+  if(data.hasErrors()) {
     log('The production code compile failed.')
   } else {
     log('The production code compile success.')

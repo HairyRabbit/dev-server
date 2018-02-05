@@ -18,7 +18,8 @@
       "useBuiltIns": true
     }],
     "@babel/plugin-syntax-dynamic-import",
-    "@babel/plugin-proposal-throw-expressions"
+    "@babel/plugin-proposal-throw-expressions",
+    "babel-plugin-lodash"
   ],
   "env": {
     "test": {

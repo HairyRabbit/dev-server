@@ -16,7 +16,13 @@
  */
 
 import { get, isRegExp } from 'lodash'
-import createTask, { clearTimer, getState } from './taskCreateor'
+import { execSync } from 'child_process'
+import createTask, {
+  startTimer,
+  clearTimer,
+  getState,
+  run
+} from './taskCreateor'
 
 export const test = /^task$/i
 export const name = 'task'
@@ -33,6 +39,26 @@ export default function command(input = [], options) {
       printHelper(options)
       break
     }
+    case 'ls': {
+      listFiles(input, options)
+      break
+    }
+    case 'run': {
+      runTask(input, options)
+      break
+    }
+    case 'start': {
+      startTask(input, options)
+      break
+    }
+    case 'stop': {
+      stopTask(input, options)
+      break
+    }
+    case 'show': {
+      printTaskResult(input, options)
+      break
+    }
     case 'config': {
       printTaskConfig(input, options)
       break
@@ -42,6 +68,56 @@ export default function command(input = [], options) {
       break
     }
   }
+}
+
+/**
+ * list dist files
+ */
+function listFiles(input, options): void {
+  const result = getState('result')
+  if(!result) {
+    options.log(`Task not run`)
+  } else {
+    const config = getState('config')
+    const dir = config.output.path
+    const ls = execSync(`ls -alhF --size --color ${dir}`)
+    options.log(`
+Directory: ${dir}
+
+${ls}`)
+  }
+}
+
+/**
+ * run task immediately
+ */
+function runTask(input, options): void {
+  run(onTaskBeginCompile(options), onTaskCompleted(options))
+}
+
+/**
+ * start task timer
+ */
+function startTask(input, options): void {
+  const timer = getState('timer')
+  if(timer) {
+    options.log('task timer was already exists, replace the current timer')
+  } else {
+    options.log('task timer create')
+  }
+  startTimer(
+    options.timeout,
+    onTaskBeginCompile(options),
+    onTaskCompleted(options)
+  )
+}
+
+/**
+ * stop task timer
+ */
+function stopTask(input, options): void {
+  clearTimer()
+  options.log('Task timer was clean')
 }
 
 function printTaskConfig(input, options): void {
@@ -84,6 +160,15 @@ function printTaskConfig(input, options): void {
   }
 }
 
+function printTaskResult(input, options): void {
+  const result = getState('result')
+  if(!result) {
+    options.log(`Task not run`)
+  } else {
+    options.log('\n' + result + '\n')
+  }
+}
+
 function execDefaultCommand(options): void {
   const timer = getState('timer')
   if(!timer) {
@@ -92,9 +177,9 @@ function execDefaultCommand(options): void {
     const createAt = getState('createAt')
     const begin = new Date(createAt).toTimeString().substr(0, 8)
     const hasError = getState('hasError')
-    const taskStatus = Boolean(hasError) ? `task run failed` : `task completed`
-    const buildStatus = getState('buildStatus') ? `but build failed` : `all is ok`
-    options.log(`task start at ${begin}. ${taskStatus}. ${buildStatus}.`)
+    const taskStatus = Boolean(hasError) ? `Run failed` : `Completed`
+    const buildStatus = getState('buildStatus') ? `But build failed` : `All is ok`
+    options.log(`Task start at ${begin}. ${taskStatus}. ${buildStatus}.`)
   }
 
   printHelper(options)
@@ -114,4 +199,27 @@ task config  - show webpack config objects
 task open    - open browsers
 task help    - print help info
 `)
+}
+
+function onTaskBeginCompile(options): Function {
+  return compiler => {
+    options.log('Webpack start to build production mode code.')
+  }
+}
+
+function onTaskCompleted(options): Function {
+  return (err: Error, data: Object) => {
+    if(err) {
+      options.log(`something wrong when task running.`)
+      console.error(err)
+      return
+    }
+
+    if(data.hasErrors()) {
+      options.log('The production code compile failed.')
+    } else {
+      options.log('The production code compile success.')
+    }
+    options.repl.displayPrompt()
+  }
 }
