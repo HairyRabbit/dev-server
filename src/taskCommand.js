@@ -35,6 +35,8 @@ export default function command(input = [], options) {
   const subCommand = input.shift()
 
   switch(subCommand) {
+    case '?':
+    case 'h':
     case 'help': {
       printHelper(options)
       break
