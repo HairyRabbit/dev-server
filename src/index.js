@@ -55,14 +55,13 @@ export default function start(): void {
   repl.pause()
 
   /**
-   * say hello
-   */
-  greeting()
-
-  /**
    * run compile prod code task pre 15 min
    */
-  createTask(DefaultTaskTimeout, onTaskBeginCompile, onTaskCompleted)
+  createTask(
+    options.timeout,
+    task.onTaskBeginCompile(options),
+    task.onTaskCompleted(options)
+  )
 
   /**
    * start web server to dev
@@ -77,40 +76,6 @@ export default function start(): void {
     log(chalk`Server start on {blue http://${host}:${port}}, Webpack start compiling...`)
     repl.resume()
   }, onServerCompileCompleted(options))
-}
-
-function onTaskBeginCompile(compiler: Compiler): void {
-  log('Webpack start to build production mode code.')
-}
-
-function onTaskCompleted(err: Error, data: Object): void {
-  if(err) {
-    log(`something wrong when task running.`)
-    console.error(err)
-    return
-  }
-
-  if(data.hasErrors()) {
-    log('The production code compile failed.')
-  } else {
-    log('The production code compile success.')
-  }
-}
-
-/**
- * say hello
- */
-function greeting() {
-  const url = 'https://api.4gml.com/yys/yy.php?fh=j'
-  request(url, (err, res, body) => {
-    if(err || 200 !== res.statusCode) {
-      repl.displayPrompt()
-      console.log(chalk`Happy Hack`)
-    } else {
-      repl.displayPrompt()
-      console.log(chalk`{bold ${JSON.parse(body).hitokoto} :)}`)
-    }
-  })
 }
 
 /**

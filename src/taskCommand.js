@@ -201,13 +201,19 @@ task help    - print help info
 `)
 }
 
-function onTaskBeginCompile(options): Function {
+/**
+ * log on task begin
+ */
+export function onTaskBeginCompile(options): Function {
   return compiler => {
     options.log('Webpack start to build production mode code.')
   }
 }
 
-function onTaskCompleted(options): Function {
+/**
+ * log on task completed
+ */
+export function onTaskCompleted(options): Function {
   return (err: Error, data: Object) => {
     if(err) {
       options.log(`something wrong when task running.`)
