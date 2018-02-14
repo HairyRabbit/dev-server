@@ -188,7 +188,9 @@ function execDefaultCommand(options): void {
 }
 
 function printHelper(options): void {
-  options.log(`\
+  options.log(`
+Keymaps: task
+
 Avaiable commands:
 
 task         - show current task status and help

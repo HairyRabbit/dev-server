@@ -12,13 +12,10 @@
     ["@babel/plugin-proposal-class-properties", {
       "loose": true
     }],
-    "@babel/plugin-proposal-export-default-from",
-    "@babel/plugin-proposal-export-namespace-from",
     ["@babel/plugin-proposal-object-rest-spread", {
       "useBuiltIns": true
     }],
     "@babel/plugin-syntax-dynamic-import",
-    "@babel/plugin-proposal-throw-expressions",
     "babel-plugin-lodash"
   ],
   "env": {

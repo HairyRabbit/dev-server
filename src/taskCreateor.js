@@ -6,6 +6,7 @@
 
 import { identity as id } from 'lodash'
 import webpack from 'webpack'
+import isInstalled from './isModuleInstalled'
 import inject from './entryInjecter'
 import norequire from './reqioreNoCache'
 
@@ -32,9 +33,14 @@ export const DefaultTaskTimeout = 900000
 export function run(onBeginRun?: Function = id, onCompleted?: Function = id): void {
   const makeWebpackOptions = norequire('./webpackOptions').default
   const webpackOptions = makeWebpackOptions('production')
+
   /**
-   * @TODO: inject polyfills
+   * inject @babel/polyfill to entry
    */
+  if(isInstalled('@babel/ployfill')) {
+    inject(webpackOptions, '@babel/ployfill')
+  }
+
   state.createAt = Date.now()
   state.config = webpackOptions
   const compiler = webpack(webpackOptions)

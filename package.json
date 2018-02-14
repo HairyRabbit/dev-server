@@ -1,6 +1,6 @@
 {
   "name": "@rabbitcc/dev-server",
-  "version": "0.0.16",
+  "version": "0.0.19",
   "description": "A dev-server",
   "main": "lib/index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "test": "jest",
     "test:co": "jest --coverage",
     "test:type": "flow",
-    "test:spec": "yarn build && sh specs/test.sh",
+    "test:spec": "yarn build && \"%ProgramFiles%/cmder/vendor/git-for-windows/usr/bin/bash.exe\" specs/test.sh",
     "prepublish": "yarn build:prod"
   },
   "repository": {
@@ -26,8 +26,7 @@
   "license": "GPL-3.0",
   "files": [
     "lib",
-    "bin",
-    "src"
+    "bin"
   ],
   "bugs": {
     "url": "https://github.com/HairyRabbit/dev-server/issues"
@@ -66,10 +65,12 @@
     "webpack-dev-server": "^2 || ^3"
   },
   "optionalDependencies": {
-    "@rabbitcc/autodll-webpack-plugin": "^0.0.12",
+    "@rabbitcc/autocdn-webpack-plugin": "^0.0.1",
+    "@rabbitcc/autodll-webpack-plugin": "^0.0.15",
     "@rabbitcc/icon-loader": "^0.0.11",
     "@rabbitcc/icon-webpack-plugin": "^0.0.11",
-    "@rabbitcc/whisper-webpack-plugin": "^0.0.7",
+    "@rabbitcc/pods-webpack-plugin": "^0.0.1",
+    "@rabbitcc/whisper-webpack-plugin": "^0.0.12",
     "clean-webpack-plugin": "^0.1.17",
     "favicons-webpack-plugin": "^0.0.7"
   },

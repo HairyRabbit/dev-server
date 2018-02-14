@@ -5,6 +5,7 @@
  * @output
  */
 
+import { identity as id } from 'lodash'
 import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
 import express from 'express'
@@ -17,7 +18,7 @@ const defaultServerOptions = {
   historyApiFallback: true
 }
 
-export default function createServer(host: string, port: string, onDone?: Function): void {
+export default function createServer(host: string, port: string, onDone?: Function = id): void {
   /**
    * inject options
    */
@@ -33,10 +34,7 @@ export default function createServer(host: string, port: string, onDone?: Functi
     'webpack/hot/only-dev-server'
   ])
   const compiler = webpack(webpackOptions)
-
-  if(onDone) {
-    compiler.plugin('done', onDone)
-  }
+  onDone(compiler)
 
   /**
    * serve task bundle static files

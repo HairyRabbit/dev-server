@@ -76,7 +76,7 @@ function printHelper(cmds, options): void {
   output.shift()
   output.shift()
   output = output.join('\n')
-  options.log(`\
+  options.log(`
 Avaiable commands:
 
 ${output}`)

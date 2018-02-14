@@ -4,6 +4,7 @@
  * @flow
  */
 
+import chalk from 'chalk'
 import startServer, { onServerCompileCompleted } from './serverStartOrRestart'
 
 export const test = /^rs$/i
@@ -15,14 +16,22 @@ export default function restartCommand(input, options) {
     printHelper(options)
     return
   }
-  startServer(options.host, options.port, err => {
+
+  const subCommand = input.shift()
+  const host = options.host
+  let port = options.port
+  if(subCommand) {
+    port = subCommand
+  }
+
+  startServer(host, port, err => {
     if(err) {
       console.error(err)
       process.exit(2)
       return
     }
 
-    options.log(`server restart...`)
+    options.log(chalk`server restart on {blue http://${host}:${port}}...`)
   }, onServerCompileCompleted(options))
 }
 
@@ -33,5 +42,10 @@ function printHelper(options): void {
   options.log(`
 Keymaps: rs
 
-Restart dev server, also webpack recompile your code.`)
+Avaiable commands:
+
+rs         - restart dev server, webpack also recompile your code
+rs [port]  - restart on given port
+rs help    - print help info
+`)
 }

@@ -13,22 +13,27 @@ import HtmlWebpackTemplate from 'html-webpack-template'
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin'
 import CleanWebpackPlugin from 'clean-webpack-plugin'
 import AutoDLLPlugin from '@rabbitcc/autodll-webpack-plugin'
+import AutoCDNPlugin from '@rabbitcc/autocdn-webpack-plugin'
 import WhisperWebpackPlugin from '@rabbitcc/whisper-webpack-plugin'
+import PodsWebpackPlugin from '@rabbitcc/pods-webpack-plugin'
 import IconWebpackPlugin from '@rabbitcc/icon-webpack-plugin'
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin'
+import isEnv from './isEnv'
+
 
 const tmp = path.resolve('tmp')
 export const src = path.resolve('src')
 export const dist = path.resolve('dist')
 const config = path.resolve('config')
+const publicDir = path.resolve('public')
 const images = path.resolve('public/images')
 const icons = path.resolve('public/icons')
 const nodeModules = path.resolve('node_modules')
 
-export default function makeWebpackOptions(env) {
+export default function makeWebpackOptions(env: string): Object {
   process.env.NODE_ENV = env
-  const isDev = env === 'development'
-  const isProd = env === 'production'
+  const isDev = isEnv('development')(env)
+  const isProd = isEnv('production')(env)
   return {
     entry: {
       main: [
@@ -37,7 +42,7 @@ export default function makeWebpackOptions(env) {
     },
     output: {
       path: isDev ? tmp : dist,
-      filename: '[name].js',
+      filename: isDev ? '[name].js' : '[name].[chunkhash].js',
       publicPath: '/'
     },
     module: {
@@ -118,19 +123,33 @@ export default function makeWebpackOptions(env) {
       modules: [nodeModules],
       unsafeCache: true,
       symlinks: false,
-      alias: { }
+      alias: {
+        '~': src,
+        '@@': images
+      }
     },
     devtool: isDev ? 'source-map' : 'none',
     target: 'web',
     plugins: [].concat(
+      new PodsWebpackPlugin({
+        context: src,
+        dir: [
+          ['style', 'css'],
+          'view',
+          'action',
+          'update',
+          'types',
+          'init'
+        ]
+      }),
       isDev ? new webpack.HotModuleReplacementPlugin() : [],
       isDev ? new webpack.NamedModulesPlugin() : new webpack.HashedModuleIdsPlugin(),
-      isDev ? new AutoDLLPlugin() : [],
+      isDev ? new AutoDLLPlugin() : new AutoCDNPlugin(),
       isDev ? new WhisperWebpackPlugin({
         optionPath: __dirname,
         checkSilent: false
       }) : [],
-      !isDev ? new ExtractTextPlugin('[name].css') : [],
+      !isDev ? new ExtractTextPlugin('[name].[contenthash].css') : [],
       !isDev ? new CleanWebpackPlugin(['dist'], { root: __dirname }) : [],
       !isDev ? new webpack.optimize.ModuleConcatenationPlugin() : [],
       !isDev ? new UglifyJsPlugin({

@@ -6,7 +6,6 @@
 
 import nodeRepl, { type REPLServer } from 'repl'
 import chalk from 'chalk'
-import request from 'request'
 import createTask, { clearTimer, DefaultTaskTimeout } from './taskCreateor'
 import { execSync as exec } from 'child_process'
 import type { Compiler } from 'webpack/cli/Compiler'
@@ -14,6 +13,8 @@ import commander, { install } from './commander'
 import taskCommand, * as task from './taskCommand'
 import quitCommand, * as quit from './quitCommand'
 import rsCommand, * as rs from './restartCommand'
+import showCommand, * as show from './showCommand'
+import dllCommand, * as dll from './dllCommand'
 import startServer, {
   closeServer,
   DefaultPort,
@@ -40,7 +41,9 @@ const options = {
 }
 
 install(rs.test, rs.name, rs.helper, rsCommand)
+install(show.test, show.name, show.helper, showCommand)
 install(task.test, task.name, task.helper, taskCommand)
+install(dll.test, dll.name, dll.helper, dllCommand)
 install(quit.test, quit.name, quit.helper, quitCommand)
 
 export default function start(): void {
