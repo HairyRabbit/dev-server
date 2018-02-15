@@ -1,6 +1,6 @@
 {
   "name": "@rabbitcc/dev-server",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "A dev-server",
   "main": "lib/index.js",
   "scripts": {
@@ -32,7 +32,7 @@
     "url": "https://github.com/HairyRabbit/dev-server/issues"
   },
   "bin": {
-    "devserver": "bin/cli.js"
+    "dev": "bin/cli.js"
   },
   "homepage": "https://github.com/HairyRabbit/dev-server#readme",
   "devDependencies": {
@@ -69,7 +69,7 @@
     "@rabbitcc/autodll-webpack-plugin": "^0.0.15",
     "@rabbitcc/icon-loader": "^0.0.11",
     "@rabbitcc/icon-webpack-plugin": "^0.0.11",
-    "@rabbitcc/pods-webpack-plugin": "^0.0.1",
+    "@rabbitcc/pods-webpack-plugin": "^0.0.2",
     "@rabbitcc/whisper-webpack-plugin": "^0.0.12",
     "clean-webpack-plugin": "^0.1.17",
     "favicons-webpack-plugin": "^0.0.7"
