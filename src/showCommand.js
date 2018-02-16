@@ -67,7 +67,7 @@ function printTasks(tasks: Array<Task>, options): void {
       RESULT: result
     }
   })
-  return options.log('Tasks list length: ${tasks.length}: \n' + getTable(out))
+  return options.log(`Tasks list length: ${tasks.length}: \n` + getTable(out))
 }
 
 function printHelper(options): void {

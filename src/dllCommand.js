@@ -35,7 +35,7 @@ export default function showCommand(input: Array<string>, options): void {
 
 function printHelper(options): void {
   options.log(`
-Keymaps: show
+Keymaps: dll
 
 Avaiable commands:
 

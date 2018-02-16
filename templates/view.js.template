@@ -1,0 +1,54 @@
+/**
+ * ${name}${isComponent ? ' component' : ''} view${isFlow ? `
+ *
+ * @flow` : ''}
+ */
+
+import * as React from 'react'${isRedux ? `
+import \{ connect \} from 'redux
+import * as actions from './action'` : ''}
+import style from './style.css'${isFlow ? `
+
+type Props = \{
+
+\}` : ''}${isState ? `
+
+type State = \{
+
+\}` : ''}
+
+export${!isRedux ? ' default' : ''} ${!isClass ? `function `+componentName+`(props`+(isFlow ? ': Props' : '')+`)`+(isFlow ? ': React.Node' : '')+` \{
+  return (
+    <div>
+      `+name+` component
+    </div>
+  )
+\}` : `class `+componentName+` extends React.`+(!isPure ? 'Component' : 'PureComponent')+``+(isFlow ? `<Props`+(isState ? ', State' : '')+`>` : '')+` \{`+(isState ? `
+  state = \{
+
+  \};
+  ` : '')+`
+  render() \{
+    const \{ \} = this.props
+    return (
+      <div>
+        `+name+` component
+      </div>
+    )
+  \}
+\}`}${isRedux ? `
+
+function mapStateToProps(state) \{
+  return \{
+
+  \}
+\}
+
+function mapDispatchToProps(dispatch) \{
+  return \{
+
+  \}
+\}
+
+export default connect(mapStateToProps, mapDispatchToProps)(`+componentName+`)
+` : ''}

@@ -15,6 +15,7 @@ import quitCommand, * as quit from './quitCommand'
 import rsCommand, * as rs from './restartCommand'
 import showCommand, * as show from './showCommand'
 import dllCommand, * as dll from './dllCommand'
+import generateCommand, * as generate from './generateCommand'
 import startServer, {
   closeServer,
   DefaultPort,
@@ -41,6 +42,7 @@ const options = {
 }
 
 install(rs.test, rs.name, rs.helper, rsCommand)
+install(generate.test, generate.name, generate.helper, generateCommand)
 install(show.test, show.name, show.helper, showCommand)
 install(task.test, task.name, task.helper, taskCommand)
 install(dll.test, dll.name, dll.helper, dllCommand)
@@ -54,6 +56,8 @@ export default function start(): void {
     prompt: DefaultPrompt,
     eval: commander(options)
   })
+
+  options.log('Server starting...')
 
   repl.pause()
 

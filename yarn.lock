@@ -530,9 +530,9 @@
     svgstore "^2.0.3"
     webpack-sources "^1.1.0"
 
-"@rabbitcc/pods-webpack-plugin@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@rabbitcc/pods-webpack-plugin/-/pods-webpack-plugin-0.0.1.tgz#daf9ed8ffda75a041f6bbd639c4cd7fdbad6de85"
+"@rabbitcc/pods-webpack-plugin@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@rabbitcc/pods-webpack-plugin/-/pods-webpack-plugin-0.0.2.tgz#6e2ad48db2b433bd0f39fcf5a114c2266023f9ce"
 
 "@rabbitcc/promise-extra@^0.0.8":
   version "0.0.8"
