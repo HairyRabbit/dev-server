@@ -1,16 +1,18 @@
 {
   "name": "@rabbitcc/dev-server",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "A dev-server",
   "main": "lib/index.js",
   "scripts": {
-    "start": "yarn build",
-    "build": "cross-env NODE_ENV=development yarn rollup -c",
-    "build:prod": "cross-env NODE_ENV=production yarn rollup -c",
-    "build:type": "flow gen-flow-files src/index.js > lib/index.js.flow",
+    "start": "yarn build -w",
+    "build": "yarn clean && cross-env NODE_ENV=development yarn rollup -c",
+    "build:prod": "yarn clean && cross-env NODE_ENV=production yarn rollup -c",
+    "build:type": "yarn clean:type && mkdir flow-typed && flow gen-flow-files src/index.js > flow-typed/modules.js",
+    "clean": "rm -rf lib",
+    "clean:type": "rm -rf flow-typed",
     "test": "jest",
     "test:co": "jest --coverage",
-    "test:type": "flow",
+    "test:type": "flow check",
     "test:spec": "yarn build && \"%ProgramFiles%/cmder/vendor/git-for-windows/usr/bin/bash.exe\" specs/test.sh",
     "prepublish": "yarn build:prod"
   },
@@ -19,13 +21,13 @@
     "url": "git+https://github.com/HairyRabbit/dev-server.git"
   },
   "keywords": [
-    "webpack",
-    "rollup"
+    "webpack"
   ],
   "author": "HairyRabbit <yfhj1990@hotmail.com>",
   "license": "GPL-3.0",
   "files": [
     "lib",
+    "templates",
     "bin"
   ],
   "bugs": {
@@ -65,13 +67,12 @@
     "webpack-dev-server": "^2 || ^3"
   },
   "optionalDependencies": {
-    "@rabbitcc/autocdn-webpack-plugin": "^0.0.1",
+    "@rabbitcc/autocdn-webpack-plugin": "^0.0.2",
     "@rabbitcc/autodll-webpack-plugin": "^0.0.15",
     "@rabbitcc/icon-loader": "^0.0.11",
     "@rabbitcc/icon-webpack-plugin": "^0.0.11",
     "@rabbitcc/pods-webpack-plugin": "^0.0.2",
     "@rabbitcc/whisper-webpack-plugin": "^0.0.12",
-    "clean-webpack-plugin": "^0.1.17",
     "favicons-webpack-plugin": "^0.0.7"
   },
   "dependencies": {
