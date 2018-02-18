@@ -8,9 +8,6 @@ import pkg from './package.json'
 export default [{
   input: path.resolve('src/index.js'),
   output: path.resolve('lib/index.js')
-},{
-  input: path.resolve('src/webpackOptions.js'),
-  output: path.resolve('lib/webpackOptions.js')
 }].map(({input, output}) => ({
   input: input,
   output: {

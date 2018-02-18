@@ -12,11 +12,14 @@
  * | task config | show webpack config objects       |
  * | task open   | open browsers                     |
  *
+ * @TODO: implement 'task open'
+ *
  * @flow
  */
 
 import { get, isRegExp } from 'lodash'
 import { execSync } from 'child_process'
+import type { Options } from './'
 import createTask, {
   startTimer,
   clearTimer,
@@ -28,7 +31,7 @@ export const test = /^task$/i
 export const name = 'task'
 export const helper = 'run a task to build production mode code.'
 
-export default function command(input = [], options) {
+export default function command(input: Array<string>, options: Options): void {
   if(!input.length) {
     execDefaultCommand(options)
   }
@@ -118,7 +121,10 @@ function startTask(input, options): void {
  * stop task timer
  */
 function stopTask(input, options): void {
-  clearTimer()
+  const timer = getState('timer')
+  if(timer) {
+    clearTimer(timer)
+  }
   options.log('Task timer was clean')
 }
 

@@ -11,7 +11,6 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import HtmlWebpackTemplate from 'html-webpack-template'
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin'
-import CleanWebpackPlugin from 'clean-webpack-plugin'
 import AutoDLLPlugin from '@rabbitcc/autodll-webpack-plugin'
 import AutoCDNPlugin from '@rabbitcc/autocdn-webpack-plugin'
 import WhisperWebpackPlugin from '@rabbitcc/whisper-webpack-plugin'
@@ -19,7 +18,6 @@ import PodsWebpackPlugin from '@rabbitcc/pods-webpack-plugin'
 import IconWebpackPlugin from '@rabbitcc/icon-webpack-plugin'
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin'
 import isEnv from './isEnv'
-
 
 const tmp = path.resolve('tmp')
 export const src = path.resolve('src')
@@ -139,18 +137,20 @@ export default function makeWebpackOptions(env: string): Object {
           'action',
           'update',
           'types',
-          'init'
+          'init',
+          'components'
         ]
       }),
       isDev ? new webpack.HotModuleReplacementPlugin() : [],
       isDev ? new webpack.NamedModulesPlugin() : new webpack.HashedModuleIdsPlugin(),
-      isDev ? new AutoDLLPlugin() : new AutoCDNPlugin(),
+      isDev ? new AutoDLLPlugin() : new AutoCDNPlugin({
+        report: false
+      }),
       isDev ? new WhisperWebpackPlugin({
         optionPath: __dirname,
         checkSilent: false
       }) : [],
       !isDev ? new ExtractTextPlugin('[name].[contenthash].css') : [],
-      !isDev ? new CleanWebpackPlugin(['dist'], { root: __dirname }) : [],
       !isDev ? new webpack.optimize.ModuleConcatenationPlugin() : [],
       !isDev ? new UglifyJsPlugin({
         cache: true,

@@ -10,7 +10,8 @@ import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
 import express from 'express'
 import inject from './entryInjecter'
-import norequire from './reqioreNoCache'
+import advanceWebpackConfig from './webpackOptions'
+import requireUserWebpackConfig from './requireUserWebpackConfig'
 
 const defaultServerOptions = {
   hot: true,
@@ -22,9 +23,15 @@ export default function createServer(host: string, port: string, onDone?: Functi
   /**
    * inject options
    */
-  const _webpackOptions = norequire('./webpackOptions')
-  const makeWebpackOptions = _webpackOptions.default
-  const webpackOptions = makeWebpackOptions('development')
+  const _webpackOptions = advanceWebpackConfig('development')
+  const userWebpackConfig = requireUserWebpackConfig()
+  const webpackOptions = userWebpackConfig
+        ? userWebpackConfig(_webpackOptions)
+        : _webpackOptions
+
+  /**
+   * @TODO: default host and port
+   */
   const serverOptions = defaultServerOptions
   serverOptions.host = host
   serverOptions.port = port
@@ -39,9 +46,9 @@ export default function createServer(host: string, port: string, onDone?: Functi
   /**
    * serve task bundle static files
    */
-  serverOptions.before = app => {
-    app.use('/dist', express.static(_webpackOptions.dist))
-  }
+  // serverOptions.before = app => {
+  //   app.use('/dist', express.static(_webpackOptions.dist))
+  // }
 
   return new WebpackDevServer(compiler, serverOptions)
 }

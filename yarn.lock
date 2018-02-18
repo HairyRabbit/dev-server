@@ -498,9 +498,9 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@rabbitcc/autocdn-webpack-plugin@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@rabbitcc/autocdn-webpack-plugin/-/autocdn-webpack-plugin-0.0.1.tgz#a795836bcb4b862d22147e6b0009c7320d1e427e"
+"@rabbitcc/autocdn-webpack-plugin@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@rabbitcc/autocdn-webpack-plugin/-/autocdn-webpack-plugin-0.0.2.tgz#54edb731081ebe27898e638b70445130e1612a02"
   dependencies:
     "@rabbitcc/promise-extra" "^0.0.8"
     "@rabbitcc/umd-extra" "^0.0.16"

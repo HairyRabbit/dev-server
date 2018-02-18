@@ -8,7 +8,7 @@ import { identity as id } from 'lodash'
 import webpack from 'webpack'
 import isInstalled from './isModuleInstalled'
 import inject from './entryInjecter'
-import norequire from './reqioreNoCache'
+import advanceWebpackConfig from './webpackOptions'
 
 type State = {
   timer: ?number,
@@ -28,11 +28,10 @@ const state: State = {
   buildStatus: null
 }
 
-export const DefaultTaskTimeout = 900000
+export const DefaultTaskTimeout: number = 900000
 
 export function run(onBeginRun?: Function = id, onCompleted?: Function = id): void {
-  const makeWebpackOptions = norequire('./webpackOptions').default
-  const webpackOptions = makeWebpackOptions('production')
+  const webpackOptions = advanceWebpackConfig('production')
 
   /**
    * inject @babel/polyfill to entry
@@ -73,10 +72,12 @@ export function startTimer(delay: number = DefaultTaskTimeout,
 }
 
 export function clearTimer() {
-  clearTimeout(state.timer)
+  if(state.timer) {
+    clearTimeout(state.timer)
+  }
   state.timer = null
 }
 
-export function getState<T>(key: T): $PropertyType<State, T> {
+export function getState(key: $Keys<State>): $Values<State> {
   return state[key]
 }

@@ -31,7 +31,17 @@ const DefaultPrompt = '> '
 let repl = null
 let webpackCurrentState = null
 
-const options = {
+export type Options = {
+  repl: REPLServer,
+  setReplPrompt: REPLServer => void,
+  log: Array<string> => void,
+  webpackCurrentState: boolean,
+  host: string,
+  port: string,
+  timeout: number
+}
+
+const options: Options = {
   repl,
   setReplPrompt,
   webpackCurrentState,
@@ -104,7 +114,7 @@ function setReplPrompt(repl: REPLServer): void {
 /**
  * log util
  */
-function log() {
+function log(...args: Array<string>) {
   repl.displayPrompt()
-  console.log.apply(console, arguments)
+  console.log.apply(console, args)
 }

@@ -62,3 +62,4 @@ dist
 lib
 tmp
 .dll
+flow-typed

@@ -13,13 +13,14 @@
 
 import { getTable } from 'console.table'
 import getPlugin from './webpackPluginMatcher'
+import type { Options } from './'
 import type { Task } from '@rabbitc/whisper-webpack-plugin'
 
 export const test = /^show$/i
 export const name = 'show'
 export const helper = 'show webpack stats details'
 
-export default function showCommand(input: Array<string>, options): void {
+export default function showCommand(input: Array<string>, options: Options): void {
   if(input.length && ~['help', 'h', '?'].indexOf(input[0])) {
     printHelper(options)
     return
@@ -58,7 +59,7 @@ export default function showCommand(input: Array<string>, options): void {
   }
 }
 
-function printTasks(tasks: Array<Task>, options): void {
+function printTasks(tasks: Array<Task>, options: Options): void {
   const out = tasks.map(task => {
     const { id, type, result } = task
     return {
@@ -70,7 +71,7 @@ function printTasks(tasks: Array<Task>, options): void {
   return options.log(`Tasks list length: ${tasks.length}: \n` + getTable(out))
 }
 
-function printHelper(options): void {
+function printHelper(options: Options): void {
   options.log(`
 Keymaps: show
 

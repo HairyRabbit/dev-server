@@ -2,9 +2,15 @@
 .*\.config\.js
 <PROJECT_ROOT>/dist/.*
 <PROJECT_ROOT>/tests/.*
+<PROJECT_ROOT>/specs/.*
+<PROJECT_ROOT>/assets/.*
+<PROJECT_ROOT>/lib/.*
+<PROJECT_ROOT>/templates/.*
+<PROJECT_ROOT>/node_modules/.*
 
 
 [include]
+.*\.flow
 
 
 [libs]
@@ -12,4 +18,3 @@
 
 [options]
 module.ignore_non_literal_requires=true
-

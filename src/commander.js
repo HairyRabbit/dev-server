@@ -5,19 +5,22 @@
  */
 
 import table from 'console.table'
+import type { Options } from './'
 
 type State = {
   defaultCommandInstalled: boolean
 }
 
+type Cmd = [RegExp, string, string, (Array<string>, Options) => void]
+
 const state: state = {
   defaultCommandInstalled: false
 }
 
-const cmds = []
+const cmds: Array<Cmd> = []
 
-export default function commander(options: Options): void {
-  return (input: string, context, filename, callback) => {
+export default function commander(options: Options) {
+  return (input: string, context: Object, filename: string, callback: Function) => {
     input = input.trim()
     const _input = input.split(' ')
     const cmd = _input.shift()
@@ -63,11 +66,19 @@ export function install(tester: RegExp,
   cmds.push([tester, name, helper, command])
 }
 
-function execDefaultCommand(input, options) {
-
+/**
+ * exec defautl command, if not match and cmd option
+ *
+ * @TODO: implement default command, now just print helper.
+ */
+function execDefaultCommand(input: string, options: Options): void {
+  printHelper(cmds, options)
 }
 
-function printHelper(cmds, options): void {
+/**
+ * print helper, include all installed cmd name and description
+ */
+function printHelper(cmds: Array<Cmd>, options: Options): void {
   let output = table.getTable(cmds.map(([_, name, helper]) => ({
     command: name,
     helper: '- ' + helper
