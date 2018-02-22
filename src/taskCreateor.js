@@ -11,7 +11,7 @@ import inject from './entryInjecter'
 import advanceWebpackConfig from './webpackOptions'
 
 type State = {
-  timer: ?number,
+  timer: ?TimeoutID,
   createAt: number,
   result: ?string,
   config: ?Object,
@@ -78,6 +78,6 @@ export function clearTimer() {
   state.timer = null
 }
 
-export function getState(key: $Keys<State>): $Values<State> {
+export function getState(key: $Keys<State>): * {
   return state[key]
 }

@@ -6,12 +6,13 @@
 
 import chalk from 'chalk'
 import startServer, { onServerCompileCompleted } from './serverStartOrRestart'
+import type { Options } from './'
 
 export const test = /^rs$/i
 export const name = 'rs'
 export const helper = 'restart dev server'
 
-export default function restartCommand(input, options) {
+export default function restartCommand(input: Array<string>, options: Options): void {
   if(input.length && ~['help', 'h', '?'].indexOf(input[0])) {
     printHelper(options)
     return
@@ -31,14 +32,14 @@ export default function restartCommand(input, options) {
       return
     }
 
-    options.log(chalk`server restart on {blue http://${host}:${port}}...`)
+    options.log(`server restart on ${chalk.blue(`http://${host}:${port}...`)}`)
   }, onServerCompileCompleted(options))
 }
 
 /**
  * print help message
  */
-function printHelper(options): void {
+function printHelper(options: Options): void {
   options.log(`
 Keymaps: rs
 

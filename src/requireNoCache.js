@@ -4,7 +4,7 @@
  * @flow
  */
 
-export default function required(mod: string): * {
+export default function forceRequire(mod: string): * {
   delete require.cache[require.resolve(mod)]
   return require(mod)
 }

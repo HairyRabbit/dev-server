@@ -18,6 +18,7 @@ import PodsWebpackPlugin from '@rabbitcc/pods-webpack-plugin'
 import IconWebpackPlugin from '@rabbitcc/icon-webpack-plugin'
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin'
 import isEnv from './isEnv'
+import type { Host, Port } from './'
 
 const tmp = path.resolve('tmp')
 export const src = path.resolve('src')
@@ -28,7 +29,7 @@ const images = path.resolve('public/images')
 const icons = path.resolve('public/icons')
 const nodeModules = path.resolve('node_modules')
 
-export default function makeWebpackOptions(env: string): Object {
+export default function makeWebpackOptions(env: string, host?: Host, port?: Port): Object {
   process.env.NODE_ENV = env
   const isDev = isEnv('development')(env)
   const isProd = isEnv('production')(env)
@@ -143,7 +144,9 @@ export default function makeWebpackOptions(env: string): Object {
       }),
       isDev ? new webpack.HotModuleReplacementPlugin() : [],
       isDev ? new webpack.NamedModulesPlugin() : new webpack.HashedModuleIdsPlugin(),
-      isDev ? new AutoDLLPlugin() : new AutoCDNPlugin({
+      isDev ? new AutoDLLPlugin({
+        injectDevClientScript: true
+      }) : new AutoCDNPlugin({
         report: false
       }),
       isDev ? new WhisperWebpackPlugin({

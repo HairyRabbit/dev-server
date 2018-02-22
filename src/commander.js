@@ -38,7 +38,7 @@ export default function commander(options: Options) {
      * install default command
      */
     if(false === state.defaultCommandInstalled) {
-      install(/^(help|h|\?)$/, 'help', 'print help info')
+      install(/^(help|h|\?)$/, 'help', 'print help info', () => {})
       state.defaultCommandInstalled = true
     }
 

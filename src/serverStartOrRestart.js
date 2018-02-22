@@ -7,6 +7,7 @@
 import { identity as id } from 'lodash'
 import webpack from 'webpack'
 import createServer from './serverCreator'
+import type { Options } from './'
 
 export const DefaultPort = '8080'
 export const DefaultHost = '0.0.0.0'
@@ -32,15 +33,17 @@ export default function startOrRestartServer(host: string = DefaultHost,
 }
 
 export function closeServer() {
-  server.close()
-  server = null
+  if(server) {
+    server.close()
+    server = null
+  }
 }
 
-export function onServerCompileCompleted(options) {
+export function onServerCompileCompleted(options: Options) {
   return compiler => {
     options.compiler = compiler
     compiler.plugin('done', stats => {
-      options.webpackCurrentState = !Boolean(stats.toJson().errors.length)
+      options.webpackCurrentState = !Boolean(stats.hasErrors())
       options.setReplPrompt(options.repl)
       options.repl.displayPrompt()
     })

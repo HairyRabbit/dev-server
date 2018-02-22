@@ -14,7 +14,6 @@
 import { getTable } from 'console.table'
 import getPlugin from './webpackPluginMatcher'
 import type { Options } from './'
-import type { Task } from '@rabbitc/whisper-webpack-plugin'
 
 export const test = /^show$/i
 export const name = 'show'
@@ -59,7 +58,7 @@ export default function showCommand(input: Array<string>, options: Options): voi
   }
 }
 
-function printTasks(tasks: Array<Task>, options: Options): void {
+function printTasks(tasks: Array<Object>, options: Options): void {
   const out = tasks.map(task => {
     const { id, type, result } = task
     return {

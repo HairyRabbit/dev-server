@@ -11,12 +11,13 @@
 import fs from 'fs'
 import path from 'path'
 import { template } from 'lodash'
+import type { Options } from './'
 
 export const test = /^g$/i
 export const name = 'g'
 export const helper = 'templates generator'
 
-export default function showCommand(input: Array<string>, options): void {
+export default function showCommand(input: Array<string>, options: Options): void {
   if(input.length && ~['help', 'h', '?'].indexOf(input[0])) {
     printHelper(options)
     return

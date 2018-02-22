@@ -78,7 +78,7 @@ export default function command(input: Array<string>, options: Options): void {
 /**
  * list dist files
  */
-function listFiles(input, options): void {
+function listFiles(input: Array<string>, options: Options): void {
   const result = getState('result')
   if(!result) {
     options.log(`Task not run`)
@@ -89,21 +89,21 @@ function listFiles(input, options): void {
     options.log(`
 Directory: ${dir}
 
-${ls}`)
+${ls.toString()}`)
   }
 }
 
 /**
  * run task immediately
  */
-function runTask(input, options): void {
+function runTask(input: Array<string>, options: Options): void {
   run(onTaskBeginCompile(options), onTaskCompleted(options))
 }
 
 /**
  * start task timer
  */
-function startTask(input, options): void {
+function startTask(input: Array<string>, options: Options): void {
   const timer = getState('timer')
   if(timer) {
     options.log('task timer was already exists, replace the current timer')
@@ -120,15 +120,15 @@ function startTask(input, options): void {
 /**
  * stop task timer
  */
-function stopTask(input, options): void {
+function stopTask(input: Array<string>, options: Options): void {
   const timer = getState('timer')
   if(timer) {
-    clearTimer(timer)
+    clearTimer()
   }
   options.log('Task timer was clean')
 }
 
-function printTaskConfig(input, options): void {
+function printTaskConfig(input: Array<string>, options: Options): void {
   const DefaultSpace = 4
   const config = getState('config')
   if(!config) {
@@ -168,7 +168,7 @@ function printTaskConfig(input, options): void {
   }
 }
 
-function printTaskResult(input, options): void {
+function printTaskResult(input: Array<string>, options: Options): void {
   const result = getState('result')
   if(!result) {
     options.log(`Task not run`)
@@ -177,7 +177,7 @@ function printTaskResult(input, options): void {
   }
 }
 
-function execDefaultCommand(options): void {
+function execDefaultCommand(options: Options): void {
   const timer = getState('timer')
   if(!timer) {
     options.log(`Task not run`)
@@ -193,7 +193,7 @@ function execDefaultCommand(options): void {
   printHelper(options)
 }
 
-function printHelper(options): void {
+function printHelper(options: Options): void {
   options.log(`
 Keymaps: task
 
@@ -214,7 +214,7 @@ task help    - print help info
 /**
  * log on task begin
  */
-export function onTaskBeginCompile(options): Function {
+export function onTaskBeginCompile(options: Options): Function {
   return compiler => {
     options.log('Webpack start to build production mode code.')
   }
@@ -223,7 +223,7 @@ export function onTaskBeginCompile(options): Function {
 /**
  * log on task completed
  */
-export function onTaskCompleted(options): Function {
+export function onTaskCompleted(options: Options): Function {
   return (err: Error, data: Object) => {
     if(err) {
       options.log(`something wrong when task running.`)

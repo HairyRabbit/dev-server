@@ -8,7 +8,7 @@ import nodeRepl, { type REPLServer } from 'repl'
 import chalk from 'chalk'
 import createTask, { clearTimer, DefaultTaskTimeout } from './taskCreateor'
 import { execSync as exec } from 'child_process'
-import type { Compiler } from 'webpack/cli/Compiler'
+import type { Compiler } from 'webpack'
 import commander, { install } from './commander'
 import taskCommand, * as task from './taskCommand'
 import quitCommand, * as quit from './quitCommand'
@@ -26,22 +26,25 @@ import startServer, {
 const host = DefaultHost
 const port = DefaultPort
 const timeout = DefaultTaskTimeout
-const DefaultPrompt = '> '
+const DefaultPrompt = '●  '
 
-let repl = null
-let webpackCurrentState = null
+let repl, webpackCurrentState
+
+export type Host = 'Host'
+export type Port = 'Port'
 
 export type Options = {
   repl: REPLServer,
   setReplPrompt: REPLServer => void,
-  log: Array<string> => void,
+  log: (...Array<string>) => void,
   webpackCurrentState: boolean,
-  host: string,
-  port: string,
+  compiler: Object,
+  host: Host,
+  port: Port,
   timeout: number
 }
 
-const options: Options = {
+const options = {
   repl,
   setReplPrompt,
   webpackCurrentState,
@@ -69,6 +72,10 @@ export default function start(): void {
 
   options.log('Server starting...')
 
+  if(!repl) {
+    return
+  }
+
   repl.pause()
 
   /**
@@ -90,7 +97,7 @@ export default function start(): void {
       return
     }
 
-    log(chalk`Server start on {blue http://${host}:${port}}, Webpack start compiling...`)
+    log(`Server start on ${chalk.blue(`http://${host}:${port}`)}, Webpack start compiling...`)
     repl.resume()
   }, onServerCompileCompleted(options))
 }
@@ -103,18 +110,21 @@ export default function start(): void {
  * ```
  */
 function setReplPrompt(repl: REPLServer): void {
-  const prompt = null !== options.webpackCurrentState
-        ? (options.webpackCurrentState
-           ? chalk.bgGreen.white(' DONE ')
-           : chalk.bgRed.white(' FAIL ')) + ' ' + DefaultPrompt
-        : DefaultPrompt
+  // const prompt = null !== options.webpackCurrentState
+  //       ? (options.webpackCurrentState
+  //          ? chalk.bgGreen.white(' DONE ')
+  //          : chalk.bgRed.white(' FAIL ')) + ' ' + DefaultPrompt
+  //       : DefaultPrompt
+  const prompt = options.webpackCurrentState
+        ? chalk.green(DefaultPrompt)
+        : chalk.red(DefaultPrompt)
   repl.setPrompt(prompt)
 }
 
 /**
  * log util
  */
-function log(...args: Array<string>) {
+function log(...args: Array<string>): void {
   repl.displayPrompt()
   console.log.apply(console, args)
 }
