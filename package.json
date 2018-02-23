@@ -1,6 +1,6 @@
 {
   "name": "@rabbitcc/dev-server",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "A dev-server",
   "main": "lib/index.js",
   "scripts": {
@@ -78,6 +78,7 @@
     "html-webpack-template": "^6.1.0",
     "jest": "^22.1.4",
     "mkdirp": "^0.5.1",
+    "nunjucks": "^3.1.0",
     "postcss-loader": "^2.0.10",
     "request": "^2.83.0",
     "style-loader": "^0.19.1",
