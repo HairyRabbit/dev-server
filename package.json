@@ -1,6 +1,6 @@
 {
   "name": "@rabbitcc/dev-server",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "A dev-server",
   "main": "lib/index.js",
   "scripts": {
@@ -13,7 +13,7 @@
     "test": "jest",
     "test:co": "jest --coverage",
     "test:type": "flow check",
-    "test:spec": "yarn build && \"%ProgramFiles%/cmder/vendor/git-for-windows/usr/bin/bash.exe\" specs/test.sh",
+    "test:spec": "yarn build && sh specs/test.sh",
     "prepublish": "yarn build:prod"
   },
   "repository": {
@@ -58,7 +58,7 @@
     "@babel/preset-flow": "^7.0.0-beta.40",
     "@babel/register": "^7.0.0-beta.40",
     "@rabbitcc/autocdn-webpack-plugin": "^0.0.2",
-    "@rabbitcc/autodll-webpack-plugin": "^0.0.19",
+    "@rabbitcc/autodll-webpack-plugin": "^0.0.20",
     "@rabbitcc/icon-loader": "^0.0.11",
     "@rabbitcc/icon-webpack-plugin": "^0.0.11",
     "@rabbitcc/pods-webpack-plugin": "^0.0.2",
