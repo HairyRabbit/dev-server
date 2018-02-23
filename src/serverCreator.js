@@ -27,7 +27,7 @@ export default function createServer(host: Host, port: Port, onDone?: Function =
   /**
    * inject options
    */
-  let webpackOptions = advanceWebpackConfig('development', host, port)
+  const webpackOptions = advanceWebpackConfig('development', host, port)
 
   /**
    * call user custom options as mutable

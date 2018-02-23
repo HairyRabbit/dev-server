@@ -12,6 +12,7 @@
 
 import chalk from 'chalk'
 import fs from 'fs'
+import { flagDevClient, flagPolyfill } from '@rabbitcc/autodll-webpack-plugin'
 import getPlugin from './webpackPluginMatcher'
 import type { Options } from './'
 
@@ -45,15 +46,30 @@ function listDll(plugin: Object, options: Options): void {
 Name: ${plugin.options.name}
 Path: ${plugin.options.output}
 `
-    let out = ''
+    const addons = []
+    const deps = []
+
     for(let key in cache) {
-      const item = cache[key]
-      if('IDENT_DEVCLIENT' !== key && 'IDENT_POLYFILL' !== key) {
-        out += ' '.repeat(2) + chalk.green('✓ ') + key + ': ' + item + '\n'
+      if(flagDevClient === key) {
+        addons.push(' '.repeat(2) + chalk.green('✓ ') + 'WDS client')
+      } else if(flagDevClient === key) {
+        addons.push(' '.repeat(2) + chalk.green('✓ ') + 'Babel polyfill')
+      } else {
+        const item = cache[key]
+        deps.push(' '.repeat(2) + chalk.green('✓ ') + key + ': ' + item)
       }
     }
 
-    console.log(header + '\n' + out)
+    /**
+     * render dll messages
+     */
+    let out = ''
+    out += header + '\n' + deps.join('\n')
+    if(addons.length) {
+      out += '\n\n' + 'addons:' + '\n\n' + addons.join('\n')
+    }
+
+    console.log(out + '\n')
   } catch(error) {
     console.error(error)
   }

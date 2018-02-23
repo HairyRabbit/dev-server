@@ -69,7 +69,8 @@ export default function makeWebpackOptions(env: string, host?: Host, port?: Port
             sourceMap: true,
             modules: true,
             importLoaders: 1,
-            camelCase: true
+            camelCase: true,
+            localIdentName: '[path][name]__[local]--[hash:base64:5]'
           }
         },{
           loader: 'postcss-loader',
@@ -81,15 +82,17 @@ export default function makeWebpackOptions(env: string, host?: Host, port?: Port
           use: [{
             loader: 'css-loader',
             options: {
+              sourceMap: true,
               modules: true,
               importLoaders: 1,
               camelCase: true,
-              minimize: true
+              minimize: true,
+              localIdentName: '[hash:base64:5]'
             }
           },{
             loader: 'postcss-loader',
             options: {
-
+              sourceMap: true
             }
           }]
         })
@@ -138,8 +141,7 @@ export default function makeWebpackOptions(env: string, host?: Host, port?: Port
           'action',
           'update',
           'types',
-          'init',
-          'components'
+          'init'
         ]
       }),
       isDev ? new webpack.HotModuleReplacementPlugin() : [],

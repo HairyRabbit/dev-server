@@ -9,6 +9,7 @@ import webpack from 'webpack'
 import isInstalled from './isModuleInstalled'
 import inject from './entryInjecter'
 import advanceWebpackConfig from './webpackOptions'
+import requireUserWebpackConfig from './requireUserWebpackConfig'
 
 type State = {
   timer: ?TimeoutID,
@@ -32,6 +33,12 @@ export const DefaultTaskTimeout: number = 900000
 
 export function run(onBeginRun?: Function = id, onCompleted?: Function = id): void {
   const webpackOptions = advanceWebpackConfig('production')
+
+  /**
+   * call user custom options as mutable
+   */
+  const userWebpackConfig = requireUserWebpackConfig('production') || requireUserWebpackConfig()
+  userWebpackConfig && userWebpackConfig(webpackOptions)
 
   /**
    * inject @babel/polyfill to entry
