@@ -1,0 +1,25 @@
+{#
+
+ File header template, setup flow marker
+
+ #}
+
+{%- macro header(text, isFlow = true) -%}
+
+{% if not isFlow -%}
+
+/**
+ * {{ text }}
+ */
+
+{%- else -%}
+
+/**
+ * {{ text }}
+ *
+ * @flow
+ */
+
+{%- endif %}
+
+{%- endmacro -%}

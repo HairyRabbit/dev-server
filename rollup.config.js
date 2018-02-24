@@ -3,6 +3,7 @@ import resolve from 'rollup-plugin-node-resolve'
 import json from 'rollup-plugin-json'
 import commonjs from 'rollup-plugin-commonjs'
 import babel from 'rollup-plugin-babel'
+import { createFilter } from 'rollup-pluginutils'
 import pkg from './package.json'
 
 export default [{
@@ -16,6 +17,7 @@ export default [{
     exports: 'named'
   },
   plugins: [].concat(
+    template(),
     resolve({
       preferBuiltins: true
     }),
@@ -36,3 +38,34 @@ export default [{
     ))
   )
 }))
+
+
+function template(options = {}){
+  const filter = createFilter([ '**/*.template'], 'node_modules/**')
+
+  return {
+    transform(code, id) {
+      if(!filter(id)) {
+        return
+      }
+
+      const templatesPath = path.resolve('src/templates')
+
+      const output = `\
+import nunjucks from "nunjucks";
+nunjucks.configure(${JSON.stringify(templatesPath)}, {
+  trimBlocks: true,
+  throwOnUndefined: true,
+  lstripBlocks: true
+});
+export default function templateRender(ctx) {
+  return nunjucks.renderString(${JSON.stringify(code)}, ctx);
+};
+`
+      return {
+        code: output,
+        map: { mappings: '' }
+      }
+    }
+  }
+}

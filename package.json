@@ -27,7 +27,6 @@
   "license": "GPL-3.0",
   "files": [
     "lib",
-    "templates",
     "bin"
   ],
   "bugs": {

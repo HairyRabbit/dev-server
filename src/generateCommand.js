@@ -13,6 +13,8 @@ import path from 'path'
 import { template } from 'lodash'
 import type { Options } from './'
 
+import viewTemplate from './templates/view.js.template'
+
 export const test = /^g$/i
 export const name = 'g'
 export const helper = 'templates generator'
@@ -27,24 +29,36 @@ export default function showCommand(input: Array<string>, options: Options): voi
   const content = fs.readFileSync(
     path.resolve(__dirname, '../templates/view.js.template'), 'utf-8'
   )
-  console.log(
-    template(content)({
-      name: 'test',
-      componentName: 'Test',
-      isComponent: true,
-      isFlow: true,
-      isRedux: true,
-      isClass: true,
-      isState: true,
-      isPure: true,
-      isMapDispatch: true,
-      isMapState: true
-    })
-  )
+  // console.log(
+  //   template(content)({
+  //     name: 'test',
+  //     componentName: 'Test',
+  //     isComponent: true,
+  //     isFlow: true,
+  //     isRedux: true,
+  //     isClass: true,
+  //     isState: true,
+  //     isPure: true,
+  //     isMapDispatch: true,
+  //     isMapState: true
+  //   })
+  // )
 
   switch(subCommand) {
     default:
-      printHelper(options)
+      console.log(viewTemplate({
+        name: 'test',
+        componentName: 'Test',
+        isComponent: true,
+        isFlow: true,
+        isRedux: true,
+        isClass: true,
+        isState: true,
+        isPure: true,
+        isMapDispatch: true,
+        isMapState: true
+      }))
+      // printHelper(options)
       break
   }
 }

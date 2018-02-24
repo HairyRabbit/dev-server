@@ -52,7 +52,7 @@ Path: ${plugin.options.output}
     for(let key in cache) {
       if(flagDevClient === key) {
         addons.push(' '.repeat(2) + chalk.green('✓ ') + 'WDS client')
-      } else if(flagDevClient === key) {
+      } else if(flagPolyfill === key) {
         addons.push(' '.repeat(2) + chalk.green('✓ ') + 'Babel polyfill')
       } else {
         const item = cache[key]

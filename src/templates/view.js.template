@@ -1,0 +1,73 @@
+{% from "file-header.template" import header %}
+{% from "newline.template" import newline %}
+
+{#
+
+ Template for view.js, include page and component
+
+ #}
+
+
+{{- header(name + " view", isFlow) -}}
+
+
+{# import react and connect if redux required #}
+
+import * as React from 'react'
+
+{%- if isRedux %}
+
+import { connect } from 'react-redux'
+import * as actions from './action'
+
+{%- endif %}
+
+import style from './style.css'
+
+{# setup react component props type #}
+
+{%- if isFlow -%}
+
+type Props = {}
+
+{%- endif %}
+
+{# setup react component state type #}
+
+{% if isState -%}
+
+type State = {}
+
+{%- endif %}
+
+{# component #}
+
+{% set exportPrefix %}
+{% if not isRedux %}
+  export default
+{% else %}
+  export
+{% endif %}
+{% endset %}
+
+{% set componentType %}
+{% if not isClass %}
+function {{ componentName }}(props: Props): React.Node {
+  return (
+
+  )
+}
+{% else %}
+class {{ componentName }} extends {{ "React.Component" if not isPure else "React.PureComponent" }}<Props, State> {
+  render() {
+    const {} = this.props
+
+    return (
+
+    )
+  }
+}
+{% endif %}
+{% endset %}
+
+{{ exportPrefix }} {{ componentType | safe }}
