@@ -23,51 +23,84 @@ import * as actions from './action'
 {%- endif %}
 
 import style from './style.css'
+{{- newline() -}}
 
-{# setup react component props type #}
 
-{%- if isFlow -%}
+{# Setup react component props and state type #}
+
+{%- if isFlow %}
 
 type Props = {}
 
-{%- endif %}
+{%- endif -%}
 
-{# setup react component state type #}
-
-{% if isState -%}
+{%- if isState %}
 
 type State = {}
 
-{%- endif %}
+{%- endif -%}
 
-{# component #}
 
-{% set exportPrefix %}
-{% if not isRedux %}
-  export default
-{% else %}
-  export
+{# Render component body #}
+
+{% set exportPrefix = "export" if isRedux else "export default" %}
+{% set componentType = "React.Component" if not isPure else "React.PureComponent" %}
+{% set functionParams = "(props: Props)" if isFlow else "(props)" %}
+{% set functionReturnType = ": React.Node" if isFlow %}
+{% set classTypeAnnotation %}
+{% if isFlow %}
+  {%- if not isState -%}
+    <Props>
+  {%- else -%}
+    <Props, State>
+  {%- endif -%}
 {% endif %}
 {% endset %}
 
-{% set componentType %}
-{% if not isClass %}
-function {{ componentName }}(props: Props): React.Node {
-  return (
+{%- macro jsx(content = "") -%}
+return (
+  {{ content | safe }}
+)
+{%- endmacro -%}
 
-  )
+
+{%- if not isClass -%}
+
+{{ exportPrefix }} function {{ componentName }}{{ functionParams }}{{ functionReturnType }} {
+  const { } = props
+
+{{ jsx(layout) | indent(2, true) }}
 }
-{% else %}
-class {{ componentName }} extends {{ "React.Component" if not isPure else "React.PureComponent" }}<Props, State> {
-  render() {
-    const {} = this.props
 
-    return (
+{%- else -%}
 
-    )
+{{ exportPrefix }} class {{ componentName }} extends {{ componentType }}{{ classTypeAnnotation | safe }} {
+  render(){{ functionReturnType }} {
+    const { } = this.props
+
+{{ jsx(layout) | indent(4, true) }}
   }
 }
-{% endif %}
-{% endset %}
 
-{{ exportPrefix }} {{ componentType | safe }}
+{% endif -%}
+
+
+{# Redux connect HOC and functions #}
+
+{%- if isRedux -%}
+
+function mapStateToProps(state) {
+  return {
+
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)({{ componentName }})
+
+{% endif %}

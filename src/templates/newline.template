@@ -6,10 +6,10 @@
 
 {%- macro newline(number = 1) -%}
 
-{% for i in range(0, number) -%}
+{%- for i in range(0, number) -%}
 
-{{ "\n" }}
+{{- "\n" -}}
 
-{%- endfor %}
+{%- endfor -%}
 
 {%- endmacro -%}

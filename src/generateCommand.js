@@ -26,23 +26,6 @@ export default function showCommand(input: Array<string>, options: Options): voi
   }
 
   const subCommand = input.shift()
-  const content = fs.readFileSync(
-    path.resolve(__dirname, '../templates/view.js.template'), 'utf-8'
-  )
-  // console.log(
-  //   template(content)({
-  //     name: 'test',
-  //     componentName: 'Test',
-  //     isComponent: true,
-  //     isFlow: true,
-  //     isRedux: true,
-  //     isClass: true,
-  //     isState: true,
-  //     isPure: true,
-  //     isMapDispatch: true,
-  //     isMapState: true
-  //   })
-  // )
 
   switch(subCommand) {
     default:
@@ -56,7 +39,8 @@ export default function showCommand(input: Array<string>, options: Options): voi
         isState: true,
         isPure: true,
         isMapDispatch: true,
-        isMapState: true
+        isMapState: true,
+        layout: ''
       }))
       // printHelper(options)
       break
