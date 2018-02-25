@@ -11,6 +11,7 @@
 import fs from 'fs'
 import path from 'path'
 import { template } from 'lodash'
+import generator from './generator/templateRender.js'
 import type { Options } from './'
 
 import viewTemplate from './templates/view.js.template'
@@ -26,30 +27,42 @@ export default function showCommand(input: Array<string>, options: Options): voi
   }
 
   const subCommand = input.shift()
+  const setupGenerator = generator(options.paths.src)
+
+  fs.writeFileSync(path.resolve('src', name))
 
   switch(subCommand) {
     default:
-      console.log(viewTemplate({
+      const viewT = viewTemplate({
         name: 'test',
         componentName: 'Test',
         isComponent: true,
         isFlow: true,
-        isRedux: true,
-        isClass: true,
-        isState: true,
-        isPure: true,
+        isRedux: false,
+        isClass: false,
+        isState: false,
+        isPure: false,
         isMapDispatch: true,
         isMapState: true,
-        layout: ''
-      }))
+        layout: `\
+<div>
+  Hello
+</div>`
+      })
       // printHelper(options)
+      setupGenerator('foo', [
+        [ 'view.js', viewT ]
+      ])
       break
   }
 }
 
 function printHelper(options): void {
   options.log(`
-Keymaps: g
+Keymaps: g, generate
+
+Generate templates
+
 
 Avaiable commands:
 

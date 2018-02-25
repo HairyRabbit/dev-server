@@ -1,1 +1,1 @@
-console.log(41)
+import 'react'

@@ -5,6 +5,6 @@
 ## usage
 
 ```js
-yarn add @rabbitc/dev-server
+yarn add @rabbitcc/dev-server
 yarn dev
 ```

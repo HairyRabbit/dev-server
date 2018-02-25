@@ -6,7 +6,7 @@
 
 {%- macro header(text, isFlow = true) -%}
 
-{% if not isFlow -%}
+{%- if not isFlow -%}
 
 /**
  * {{ text }}

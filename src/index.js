@@ -1,5 +1,5 @@
 /**
- * start server
+ * dev-server
  *
  * @flow
  */
@@ -9,6 +9,7 @@ import chalk from 'chalk'
 import createTask, { clearTimer, DefaultTaskTimeout } from './taskCreateor'
 import { execSync as exec } from 'child_process'
 import type { Compiler } from 'webpack'
+import paths from './defaultPaths'
 import commander, { install } from './commander'
 import taskCommand, * as task from './taskCommand'
 import quitCommand, * as quit from './quitCommand'
@@ -41,7 +42,8 @@ export type Options = {
   compiler: Object,
   host: Host,
   port: Port,
-  timeout: number
+  timeout: number,
+  paths: typeof paths
 }
 
 const options = {
@@ -51,7 +53,8 @@ const options = {
   log,
   host,
   port,
-  timeout
+  timeout,
+  paths
 }
 
 install(rs.test, rs.name, rs.helper, rsCommand)

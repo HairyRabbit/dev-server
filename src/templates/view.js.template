@@ -59,7 +59,7 @@ type State = {}
 
 {%- macro jsx(content = "") -%}
 return (
-  {{ content | safe }}
+{{ content | safe | indent(2, true) }}
 )
 {%- endmacro -%}
 
@@ -69,7 +69,7 @@ return (
 {{ exportPrefix }} function {{ componentName }}{{ functionParams }}{{ functionReturnType }} {
   const { } = props
 
-{{ jsx(layout) | indent(2, true) }}
+{{ jsx(layout) | indent(2, true) -}}
 }
 
 {%- else -%}
@@ -78,7 +78,7 @@ return (
   render(){{ functionReturnType }} {
     const { } = this.props
 
-{{ jsx(layout) | indent(4, true) }}
+{{ jsx(layout) | indent(4, true) -}}
   }
 }
 
