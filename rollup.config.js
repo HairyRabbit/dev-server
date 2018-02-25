@@ -9,6 +9,9 @@ import pkg from './package.json'
 export default [{
   input: path.resolve('src/index.js'),
   output: path.resolve('lib/index.js')
+},{
+  input: path.resolve('src/editor/index.js'),
+  output: path.resolve('lib/editor.js')
 }].map(({input, output}) => ({
   input: input,
   output: {

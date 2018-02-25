@@ -8,12 +8,12 @@
 import { identity as id } from 'lodash'
 import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
+import serve from 'webpack-serve'
 import express from 'express'
 import inject from './entryInjecter'
 import advanceWebpackConfig from './webpackOptions'
 import requireUserWebpackConfig from './requireUserWebpackConfig'
 import type { Host, Port } from './'
-
 
 const defaultServerOptions = {
   hot: true,
@@ -59,6 +59,7 @@ export default function createServer(host: Host, port: Port, onDone?: Function =
    * inject WDS and HMR to entry
    */
   inject(webpackOptions, [
+    require.resolve('./editor'),
     `webpack-dev-server/client?http://${host}:${port}`,
     'webpack/hot/only-dev-server'
   ])
@@ -70,4 +71,5 @@ export default function createServer(host: Host, port: Port, onDone?: Function =
    * construtor server and start
    */
   return new WebpackDevServer(compiler, serverOptions)
+  // return serve({ compiler, host, port })
 }

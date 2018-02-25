@@ -30,6 +30,8 @@ export default function startOrRestartServer(host: string = DefaultHost,
    */
   server = createServer(host, port, onCompleted)
   server.listen(port, host, callback)
+  // server.then(console.log)
+  // server.on('listening', callback)
 }
 
 export function closeServer() {

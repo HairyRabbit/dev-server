@@ -1,0 +1,14 @@
+{% from "file-header.template" import header %}
+
+{#
+
+ Template for style.css
+
+ #}
+
+
+{{- header(name + " styles", false) -}}
+
+.container {
+
+}
